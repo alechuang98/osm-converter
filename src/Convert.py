@@ -74,7 +74,12 @@ def main():
                 out_point, out_vector = out_road[0], out_road[1]
                 unit_in_vector = in_vector / np.linalg.norm(in_vector)
                 unit_out_vector = out_vector / np.linalg.norm(out_vector)
-                degree = np.arccos(np.dot(unit_in_vector, unit_out_vector)) * 180 / math.pi
+                inner = np.dot(unit_in_vector, unit_out_vector)
+                if inner > 1:
+                    inner = 1
+                if inner < -1:
+                    inner = -1
+                degree = np.arccos(inner) * 180 / math.pi
                 if degree < Constant.TURNING_THRESHOLD_ANGLE:
                     continue
                 if degree > Constant.USING_LINE_THRESHOLD_ANGLE:
