@@ -38,3 +38,11 @@ def get_circle_and_segment_intersection(l, center, r):
         else:
             outside = mid
     return inside
+
+def rotate(a, theta, center):
+    rotate_matrix = np.array([
+        [math.cos(theta), -math.sin(theta)],
+        [math.sin(theta), math.cos(theta)]
+    ])
+    return (rotate_matrix @ (a - center)) + center
+
