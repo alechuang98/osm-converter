@@ -147,10 +147,10 @@ def main():
                 else:
                     res_arcs.append([center.tolist(), out_road[0], in_road[0]])
 
-    plot_log(args.output, res_nodes, res_edges, res_arcs)
+    # plot_log(args.log, res_nodes, res_edges, res_arcs)
     res_nodes, res_edges = add_point(res_nodes, res_edges, copy.deepcopy(res_arcs))
-    log2json(args.log, res_nodes, res_edges)
-    plot_log(args.output, res_nodes, res_edges, res_arcs)
+    log2json(args.output, res_nodes, res_edges)
+    # plot_log(args.log, res_nodes, res_edges, {})
 
 if __name__ == "__main__":
     main()
