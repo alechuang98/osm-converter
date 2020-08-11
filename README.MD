@@ -7,6 +7,7 @@ matplotlib 3.1.3
 
 ### Usage
 Extract edges and nodes from the osm file to json file
+We only extract the roads that are labeled motorway, trunk, primary, secondary
 ```
 python src/extract.py <input osm file> <output json file>
 ```
