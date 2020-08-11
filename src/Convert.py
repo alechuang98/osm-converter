@@ -44,6 +44,16 @@ def get_road_endpoint(l, p1, p2):
     res2 = Utils.get_circle_and_segment_intersection(l, p2, Constant.INTERSECTION_RADIUS)
     return np.array([res1, res2])
 
+def min_distance(pos,edges):
+    min = Utils.distance(pos[edges[0][0]], pos[edges[0][1]])
+    for edge in edges:
+        a = pos[edge[0]]
+        b = pos[edge[1]]
+        edge_distance = Utils.distance(a, b)
+        if edge_distance < min:
+            min = edge_distance
+    return min
+
 def add_point(nodes, edges, arcs):
     res_nodes = nodes.copy()
     res_edges = []
@@ -68,7 +78,10 @@ def add_point(nodes, edges, arcs):
         a_id, b_id = arc[1], arc[2]
         arc[1] = nodes[arc[1]]
         arc[2] = nodes[arc[2]]
+#        if arc[3] == 0:
         a, b = np.array(arc[1]), np.array(arc[2])
+#        else:
+#            b, a = np.array(arc[1]), np.array(arc[2])
         center = np.array(arc[0])
         r = math.sqrt((arc[0][0] - arc[1][0]) ** 2 + (arc[0][1] - arc[1][1]) ** 2)
         start = math.atan2(arc[1][1] - arc[0][1], arc[1][0] - arc[0][0])
@@ -84,7 +97,10 @@ def add_point(nodes, edges, arcs):
             new_point = Utils.rotate(prev_point, delta, center)
             new_id = len(res_nodes)
             res_nodes.append(new_point.tolist())
-            res_edges.append([prev_id, new_id])
+            if arc[3] == 0:
+                res_edges.append([prev_id, new_id])
+            else:
+                res_edges.append([new_id, prev_id])
             prev_point = new_point
             prev_id = new_id
         res_edges.append([prev_id, b_id])
@@ -102,6 +118,11 @@ def main():
     node_amount = len(pos)
     edge_amount = len(edges)
 
+#    plot_log(args.output, pos, edges, [])
+    min_d = min_distance(pos, edges)
+    if min_d <= 2 * Constant.INTERSECTION_RADIUS:
+        pos *= 2 * Constant.INTERSECTION_RADIUS / min_d
+
     res_edges = [[] for _ in range(edge_amount * 2)]
     res_nodes = []
     cnt_nodes = 0
@@ -113,7 +134,7 @@ def main():
         endpoints = np.array([get_road_endpoint(roads[0], a, b), get_road_endpoint(roads[1], a, b)])
         res_nodes += endpoints[0].tolist() + endpoints[1].tolist()
         res_edges[i] += [cnt_nodes, cnt_nodes + 1]
-        res_edges[i + len(edges)] += [cnt_nodes + 2, cnt_nodes + 3]
+        res_edges[i + len(edges)] += [cnt_nodes + 3, cnt_nodes + 2]
         intersections[edge[0]]["out"].append([cnt_nodes, b - a])
         intersections[edge[0]]["in"].append([cnt_nodes + 2, b - a])
         intersections[edge[1]]["in"].append([cnt_nodes + 1, a - b])
@@ -143,9 +164,9 @@ def main():
                 out_line_orthogonal = np.array([out_point, out_point + np.array([out_vector[1], -out_vector[0]])])
                 center = Utils.get_line_intersection(in_line_orthogonal, out_line_orthogonal)
                 if Utils.outer(in_point - center, out_point - center) > 0:
-                    res_arcs.append([center.tolist(), in_road[0], out_road[0]])
+                    res_arcs.append([center.tolist(), in_road[0], out_road[0], 0])
                 else:
-                    res_arcs.append([center.tolist(), out_road[0], in_road[0]])
+                    res_arcs.append([center.tolist(), out_road[0], in_road[0], 1])
 
     # plot_log(args.log, res_nodes, res_edges, res_arcs)
     res_nodes, res_edges = add_point(res_nodes, res_edges, copy.deepcopy(res_arcs))
