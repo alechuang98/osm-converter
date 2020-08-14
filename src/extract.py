@@ -20,17 +20,20 @@ def process_element(elem):
             nodes.append((float(elem_dict["node"]["lat"]), float(elem_dict["node"]["lon"])))
     elif (elem.tag == "way"):
         flag = 0
-        for datas in elem_dict["way"]["tag"]:
-            if datas["k"] == "highway":
-                if datas["v"] in highway:
-                    flag = 1
-                    break;
-        if flag:
-            temp = []
-            for datas in elem_dict["way"]["nd"]:
-                if int(datas["ref"]) in nodes_id:
-                    temp.append(int(datas["ref"]))
-            edges.append([temp])
+        if 'tag' in elem_dict["way"]:
+            if isinstance(elem_dict["way"]["tag"], list) == False:
+                elem_dict["way"]["tag"] = [elem_dict["way"]["tag"]]
+            for datas in elem_dict["way"]["tag"]:
+                if datas["k"] == "highway":
+                    if datas["v"] in highway:
+                        flag = 1
+                        break;
+            if flag:
+                temp = []
+                for datas in elem_dict["way"]["nd"]:
+                    if int(datas["ref"]) in nodes_id:
+                        temp.append(int(datas["ref"]))
+                edges.append([temp])
     elif (elem.tag == "bounds"):
         bounds.append(float(elem_dict["bounds"]["minlat"]))
         bounds.append(float(elem_dict["bounds"]["minlon"]))
@@ -51,7 +54,7 @@ def fast_iter(context, func_element, maxline):
             while elem.getprevious() is not None:
                del elem.getparent()[0]
     except Exception as ex:
-        print(time.strftime(ISOTIMEFORMAT),", Error:",ex)
+        print("Error:",ex)
 
     del context
 
