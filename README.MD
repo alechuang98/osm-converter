@@ -1,9 +1,11 @@
 # OSM CONVERTER
 
 ### Dependencies
-python 3.6.8
-numpy 1.17.5
-matplotlib 3.1.3
+python 3.6.8  
+numpy 1.17.5  
+matplotlib 3.1.3  
+geopy 2.0.0  
+lxml 4.5.2
 
 ### Usage
 Extract edges and nodes from the osm file to json file.  
