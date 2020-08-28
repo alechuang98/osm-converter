@@ -103,7 +103,10 @@ def add_point(nodes, edges, arcs):
                 res_edges.append([new_id, prev_id])
             prev_point = new_point
             prev_id = new_id
-        res_edges.append([prev_id, b_id])
+        if arc[3] == 0:
+            res_edges.append([prev_id, b_id])
+        else:
+            res_edges.append([b_id, prev_id])
 
     return res_nodes, res_edges
 
