@@ -9,7 +9,7 @@ bounds = []
 nodes_id = []
 nodes = []
 edges = []
-highway = ["motorway", "trunk", "primary", "secondary"]
+highway = ["motorway", "trunk", "primary", "secondary", "residential"]
 def process_element(elem):
     elem_data = etree.tostring(elem)
     elem_dict = xmltodict.parse(elem_data,attr_prefix="",cdata_key="")
