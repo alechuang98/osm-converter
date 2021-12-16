@@ -29,8 +29,7 @@ def plot_log(file, nodes, edges, arcs={}):
     res["arcs"] = copy.deepcopy(arcs)
     plot = Plot(res)
     plot.plot()
-    plot.show()
-    # plot.savefig(file)
+    plot.savefig(file)
 
 def get_shift_segment(l, scale=Constant.ROAD_WIDTH):
     assert np.array_equal(l[0], l[1]) == False
@@ -171,10 +170,9 @@ def main():
                 else:
                     res_arcs.append([center.tolist(), out_road[0], in_road[0], 1])
 
-    # plot_log(args.log, res_nodes, res_edges, res_arcs)
+    plot_log(args.log, res_nodes, res_edges, res_arcs)
     res_nodes, res_edges = add_point(res_nodes, res_edges, copy.deepcopy(res_arcs))
     log2json(args.output, res_nodes, res_edges)
-    # plot_log(args.log, res_nodes, res_edges, {})
 
 if __name__ == "__main__":
     main()

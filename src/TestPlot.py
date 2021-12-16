@@ -17,6 +17,6 @@ for i,j in edge:
 	qq.append((x[i],x[j]))
 	pp.append((y[i],y[j]))
 for i in range(len(qq)):
-	plt.plot(qq[i],pp[i],color='r')
-plt.scatter(x, y, color='b')
-plt.show()
+	plt.plot(qq[i],pp[i],color='b')
+plt.scatter(x, y, color='b', s=5)
+plt.savefig(sys.argv[2])
