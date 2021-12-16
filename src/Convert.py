@@ -77,10 +77,9 @@ def add_point(nodes, edges, arcs):
         a_id, b_id = arc[1], arc[2]
         arc[1] = nodes[arc[1]]
         arc[2] = nodes[arc[2]]
-#        if arc[3] == 0:
+
         a, b = np.array(arc[1]), np.array(arc[2])
-#        else:
-#            b, a = np.array(arc[1]), np.array(arc[2])
+
         center = np.array(arc[0])
         r = math.sqrt((arc[0][0] - arc[1][0]) ** 2 + (arc[0][1] - arc[1][1]) ** 2)
         start = math.atan2(arc[1][1] - arc[0][1], arc[1][0] - arc[0][0])
@@ -120,7 +119,7 @@ def main():
     node_amount = len(pos)
     edge_amount = len(edges)
 
-#    plot_log(args.output, pos, edges, [])
+
     min_d = min_distance(pos, edges)
     if min_d <= 2 * Constant.INTERSECTION_RADIUS:
         pos *= 2 * Constant.INTERSECTION_RADIUS / min_d
