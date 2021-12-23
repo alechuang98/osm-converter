@@ -2,7 +2,7 @@ import numpy as np
 import math
 import Constant
 
-def outer(a, b):
+def cross_product(a, b):
     return a[0] * b[1] - a[1] * b[0]
 
 def distance2(a, b):
@@ -12,14 +12,20 @@ def distance(a, b):
     return math.sqrt(distance2(a, b))
 
 def get_line_intersection(l1, l2):
+    """Return intersection of two lines [x, y]
+
+    Parameters:
+    -l1: line1 [[x, y], [x, y]]
+    -l2: line2 [[x, y], [x, y]]
+    """
     p1 = np.array(l1[0])
     p2 = np.array(l1[1])
     q1 = np.array(l2[0])
     q2 = np.array(l2[1])
-    if abs(outer(p2 - p1, q2 - q1)) < Constant.EPS and abs(outer(p2 - p1, q1 - p1)) < Constant.EPS:
+    if abs(cross_product(p2 - p1, q2 - q1)) < Constant.EPS and abs(cross_product(p2 - p1, q1 - p1)) < Constant.EPS:
         return l2[0]
-    f1 = outer(p2 - p1, q1 - p1)
-    f2 = outer(p2 - p1, p1 - q2)
+    f1 = cross_product(p2 - p1, q1 - p1)
+    f2 = cross_product(p2 - p1, p1 - q2)
     f = f1 + f2
     assert abs(f) > Constant.EPS
     return q1 * (f2 / f) + q2 * (f1 / f)
